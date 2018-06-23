@@ -3,6 +3,10 @@
 #include <stdio.h>
 
 void usage(void) {
+    int major, minor, revision;
+
+    mosquitto_lib_version(&major, &minor, &revision);
+
     fprintf(stdout, "prometheus-mqttbroker-stats-exporter version %s\n"
             "Copyright (C) by Andreas Maus <maus@ypbind.de>\n"
             "This program comes with ABSOLUTELY NO WARRANTY.\n"
@@ -64,6 +68,6 @@ void usage(void) {
             "\n"
             "   -d                              Enable debug outout\n"
             "   --debug"
-            "\n", PROMETHEUS_MQTTBROKER_STATS_EXPORTER_VERSION, LIBMOSQUITTO_MAJOR, LIBMOSQUITTO_MINOR, LIBMOSQUITTO_REVISION);
+            "\n", PROMETHEUS_MQTTBROKER_STATS_EXPORTER_VERSION, major, minor, revision);
 };
 
