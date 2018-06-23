@@ -1,0 +1,5 @@
+tmp/
+core.*
+prometheus-mqttbroker-stats-exporter.h
+*.swp
+
