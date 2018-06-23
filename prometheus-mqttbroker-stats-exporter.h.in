@@ -144,7 +144,11 @@ struct configuration {
     struct mosquitto *mqtt_handle;  // holds MQTT connection information for worker thread
     struct statistics *broker_stats;    // broker statistics
     bool debug;                 // enable debug output
+    int http_port;              // -l <http_port>
 };
+
+// Required because libmicrohttpd need to access information
+extern struct configuration *config;
 
 #endif /* __PROMETHEUS_MQTTBROKER_STATS_EXPORTER_CONFIG_H__ */
 

@@ -10,6 +10,7 @@
 #include "prometheus-mqttbroker-stats-exporter.h"
 #include "usage.h"
 #include "mqtt_connect.h"
+#include "exporter.h"
 
 const char *const short_opts = "hu:p:c:k:C:D:iH:P:K:Q:T:t:f:sd";
 const struct option long_opts[] = {
@@ -34,15 +35,16 @@ const struct option long_opts[] = {
 };
 
 pthread_mutex_t mqtt_mutex = PTHREAD_MUTEX_INITIALIZER;
+struct configuration *config;
  
 int main(int argc, char** argv) {
-    struct configuration *config;
     int gorc;
     int optindex;
     pthread_mutexattr_t zwave_mutex_attr;
     char *remain;
     long int converted;
     pthread_t mqtt_connection_thread;
+    struct MHD_Daemon *httpd = NULL;
 
     config = (struct configuration *) malloc(sizeof(struct configuration));
     if (!config) {
@@ -56,6 +58,7 @@ int main(int argc, char** argv) {
     config->mqtt_ssl = false;
     config->mqtt_ssl_insecure = false;
     config->mqtt_port = 1883;
+    config->http_port = 11883;
     config->mqtt_keepalive = 10;
     config->mqtt_connect_timeout = -1;
     config->debug = false;
@@ -277,6 +280,12 @@ int main(int argc, char** argv) {
     if ((config->mqtt_qos < 0) || (config->mqtt_qos > 2)) {
         fprintf(stderr, "ERROR: Invalid MQTT QoS value, must be either 0, 1 or 2 but not %d\n", config->mqtt_qos);
         exit(2);
+    }
+
+    httpd = MHD_start_daemon(MHD_USE_SELECT_INTERNALLY, config->http_port, NULL, NULL, &handle_http_request, NULL, MHD_OPTION_END);
+    if (!httpd) {
+        fprintf(stderr, "ERROR: Unable to start HTTPD thread\n");
+        exit(1);
     }
 
     // XXX: Check for return code of pthread_create !

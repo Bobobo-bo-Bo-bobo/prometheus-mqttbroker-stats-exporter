@@ -1,5 +1,5 @@
-#ifndef __BADPHISH_MQTT_ZWAVE_UTIL_H__
-#define __BADPHISH_MQTT_ZWAVE_UTIL_H__
+#ifndef __PROMETHEUS_MQTTBROKER_STATS_EXPORTER_UTIL_H__
+#define __PROMETHEUS_MQTTBROKER_STATS_EXPORTER_UTIL_H__
 
 char *uuidgen(void);
 
@@ -14,5 +14,5 @@ void *memset(void *, int, size_t);
 
 #endif /* HAVE_MEMSET */
 
-#endif /* __BADPHISH_MQTT_ZWAVE_UTIL_H__ */
+#endif /* __PROMETHEUS_MQTTBROKER_STATS_EXPORTER_UTIL_H__ */
 
