@@ -100,10 +100,41 @@ void _mqtt_disconnect_callback(struct mosquitto *mosq, void *obj, int rc) {
     };
 };
 
+char *_set_stat(char *ptr, char *data) {
+    // release previous allocated memory
+    // XXX: On Linux calling free with a NULL pointer will do nothing. What about other UNIX systems ?
+    free(ptr);
+
+    // we blindly assuming we have enough memory to copy the statistics payload
+    return strdup(data);
+}
+
+void _update_broker_stats(struct statistics *stats, const char *topic, char *data) {
+    if (!strcmp(topic, "$SYS/broker/clients/total")) {
+        stats->total_clients = _set_stat(stats->total_clients, data);
+    } else if (!strcmp(topic, "$SYS/broker/bytes/received")) {
+        stats->bytes_received = _set_stat(stats->bytes_received, data);
+    } else if (!strcmp(topic, "$SYS/broker/bytes/sent")) {
+        stats->bytes_sent = _set_stat(stats->bytes_sent, data);
+    } else if (!strcmp(topic, "$SYS/broker/clients/expired")) {
+        stats->clients_expired = _set_stat(stats->clients_expired, data);
+    } else if (!strcmp(topic, "$SYS/broker/clients/maximum")) {
+        stats->clients_maximum = _set_stat(stats->clients_maximum, data);
+    } else if (!strcmp(topic, "$SYS/broker/clients/total")) {
+        stats->clients_total = _set_stat(stats->clients_total, data);
+    } else {
+        fprintf(stderr, "Unaccounted topic %s = %s\n", topic, data);
+    }
+
+}
+
 void _mqtt_message_callback(struct mosquitto *mosq, void *obj, const struct mosquitto_message *message) {
     struct configuration *cfg = (struct configuration *) obj;
     if (message) {
-        printf("> MQTT message on %s of %d bytes -> %s\n", message->topic, message->payloadlen, (char *)message->payload);
+//        printf("> MQTT message on %s of %d bytes -> %s\n", message->topic, message->payloadlen, (char *)message->payload);
+        pthread_mutex_lock(&mqtt_mutex);
+        _update_broker_stats(cfg->broker_stats, message->topic, (char *) message->payload);
+        pthread_mutex_unlock(&mqtt_mutex);
     }
 };
 
@@ -221,5 +252,4 @@ void *mqtt_connect(void *ptr) {
     free(mqtt_id);
     return NULL;
 }
-
 

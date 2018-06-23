@@ -12,6 +12,24 @@
 
 extern pthread_mutex_t mqtt_mutex;
 
+// Note: we store all metrics as char * because the export process would reconvert the data into
+// a string anyway.
+struct statistics {
+    // total number of bytes received since the broker started.
+    char *bytes_received;
+    // total number of bytes sent since the broker started.
+    char *bytes_sent;
+    // number of disconnected persistent clients that have been expired and removed through the persistent_client_expiration option.
+    char *clients_expired;
+    // maximum number of clients that have been connected to the broker at the same time
+    char *clients_maximum;
+    // total number of active and inactive clients currently connected and registered on the broker.
+    char *clients_total;
+    // total number of connected and disconnected clients with a persistent session currently connected and registered on the broker.
+    char *total_clients;
+
+};
+
 struct configuration {
     /*
      * mqtt_user/mqtt_password and mqtt_ssl_* are mutually exclusive
@@ -30,6 +48,7 @@ struct configuration {
     int mqtt_qos;               // -Q <qos>
     int mqtt_connect_timeout;   // -t <timeout>
     struct mosquitto *mqtt_handle;  // holds MQTT connection information for worker thread
+    struct statistics *broker_stats;    // broker statistics
     bool debug;                 // enable debug output
 };
 

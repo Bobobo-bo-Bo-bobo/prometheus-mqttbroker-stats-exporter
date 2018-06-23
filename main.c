@@ -50,19 +50,7 @@ int main(int argc, char** argv) {
         exit(1);
     }
 
-#ifdef HAVE_MEMSET
     memset((void *)config, 0, sizeof(struct configuration));
-#else
-    config->mqtt_user = NULL;
-    config->mqtt_password = NULL;
-    config->mqtt_ssl_certfile = NULL;
-    config->mqtt_ssl_keyfile = NULL;
-    config->mqtt_ssl_cafile = NULL;
-    config->mqtt_ssl_cadir = NULL;
-    config->mqtt_host = NULL;
-    config->mqtt_qos = 0;
-    config->mqtt_handle = NULL;
-#endif
 
     // set defaults
     config->mqtt_ssl = false;
@@ -71,6 +59,14 @@ int main(int argc, char** argv) {
     config->mqtt_keepalive = 10;
     config->mqtt_connect_timeout = -1;
     config->debug = false;
+    config->broker_stats = malloc(sizeof(struct statistics));
+
+    if (!config->broker_stats) {
+        fprintf(stderr, "ERROR: Unable to allocate %d bytes of memory for broker statistics\n", sizeof(struct statistics));
+        exit(1);
+    }
+
+    memset(config->broker_stats, 0, sizeof(struct statistics));
 
     // parse comman line parameters
     for (;;) {
