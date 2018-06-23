@@ -1,0 +1,37 @@
+#ifndef __PROMETHEUS_MQTTBROKER_STATS_EXPORTER_CONFIG_H__
+#define __PROMETHEUS_MQTTBROKER_STATS_EXPORTER_CONFIG_H__
+
+#define PROMETHEUS_MQTTBROKER_STATS_EXPORTER_VERSION "@PROMETHEUS_MQTTBROKER_STATS_EXPORTER_VERSION@"
+
+#cmakedefine HAVE_MEMSET
+
+#define MQTT_SYS_TOPIC "$SYS/#"
+
+#include <pthread.h>
+#include <mosquitto.h>
+
+extern pthread_mutex_t mqtt_mutex;
+
+struct configuration {
+    /*
+     * mqtt_user/mqtt_password and mqtt_ssl_* are mutually exclusive
+     */
+    char *mqtt_user;            // -u <user>
+    char *mqtt_password;        // -p <pass>
+    bool mqtt_ssl;              // -s
+    char *mqtt_ssl_certfile;    // -c <cert_file>
+    char *mqtt_ssl_keyfile;     // -k <key_file>
+    char *mqtt_ssl_cafile;      // -C <ca_file>
+    char *mqtt_ssl_cadir;       // -D <ca_dir>
+    bool mqtt_ssl_insecure;     // -i
+    char *mqtt_host;            // -H <host_or_address>
+    int mqtt_port;              // -P <port>
+    int mqtt_keepalive;         // -K <keep_alive_interval>
+    int mqtt_qos;               // -Q <qos>
+    int mqtt_connect_timeout;   // -t <timeout>
+    struct mosquitto *mqtt_handle;  // holds MQTT connection information for worker thread
+    bool debug;                 // enable debug output
+};
+
+#endif /* __PROMETHEUS_MQTTBROKER_STATS_EXPORTER_CONFIG_H__ */
+
