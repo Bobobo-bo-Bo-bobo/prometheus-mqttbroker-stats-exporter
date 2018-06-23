@@ -14,7 +14,7 @@ void usage(void) {
             "prometheus-mqttbroker-stats-exporter is distributed under the terms of the GNU General\n"
             "Public License Version 3. (http://www.gnu.org/copyleft/gpl.html)\n"
             "\n"
-            "iLinked Mosquitto library version %u.%u.%u\n\n"
+            "Linked Mosquitto library version %u.%u.%u\n\n"
             "Usage: prometheus-mqttbroker-stats-exporter [-h|--help] [-u <user>|--user=<user>] \n"
             "   [-p <password>|--password=<password>] [-c <cert_file>|--cert-file=<cert_file>] [-k <key_file>|--key-file=<key_file>]\n"
             "   [-C <ca_file>|--ca-file=<ca_file>] [-D <ca_dir>|--ca-dir=<ca_dir>] [-i|--insecure] -H <host>|--host=<host>\n"
