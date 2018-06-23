@@ -109,7 +109,9 @@ char *_set_stat(char *ptr, char *data) {
     return strdup(data);
 }
 
-void _update_broker_stats(struct statistics *stats, const char *topic, char *data) {
+void _update_broker_stats(struct configuration *cfg, const char *topic, char *data) {
+    struct statistics *stats = cfg->broker_stats;
+
     if (!strcmp(topic, "$SYS/broker/clients/total")) {
         stats->total_clients = _set_stat(stats->total_clients, data);
     } else if (!strcmp(topic, "$SYS/broker/bytes/received")) {
@@ -122,18 +124,109 @@ void _update_broker_stats(struct statistics *stats, const char *topic, char *dat
         stats->clients_maximum = _set_stat(stats->clients_maximum, data);
     } else if (!strcmp(topic, "$SYS/broker/clients/total")) {
         stats->clients_total = _set_stat(stats->clients_total, data);
+    } else if (!strcmp(topic, "$SYS/broker/clients/connected")) {
+        stats->clients_connected = _set_stat(stats->clients_connected, data);
+    } else if (!strcmp(topic, "$SYS/broker/clients/active")) {
+        stats->clients_active = _set_stat(stats->clients_active, data);
+    } else if (!strcmp(topic, "$SYS/broker/heap/current")) {
+        stats->heap_current = _set_stat(stats->heap_current, data);
+    } else if (!strcmp(topic, "$SYS/broker/heap/maximum")) {
+        stats->heap_maximum = _set_stat(stats->heap_maximum, data);
+    } else if (!strcmp(topic, "$SYS/broker/clients/disconnected")) {
+        stats->clients_disconnected = _set_stat(stats->clients_disconnected, data);
+    } else if (!strcmp(topic, "$SYS/broker/clients/inactive")) {
+        stats->clients_inactive = _set_stat(stats->clients_inactive, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/connections/1min")) {
+        stats->connections_1min = _set_stat(stats->connections_1min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/connections/5min")) {
+        stats->connections_5min = _set_stat(stats->connections_5min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/connections/15min")) {
+        stats->connections_15min = _set_stat(stats->connections_15min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/bytes/received/1min")) {
+        stats->bytes_received_1min = _set_stat(stats->bytes_received_1min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/bytes/received/5min")) {
+        stats->bytes_received_5min = _set_stat(stats->bytes_received_5min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/bytes/received/15min")) {
+        stats->bytes_received_15min = _set_stat(stats->bytes_received_15min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/bytes/sent/1min")) {
+        stats->bytes_sent_1min = _set_stat(stats->bytes_sent_1min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/bytes/sent/5min")) {
+        stats->bytes_sent_5min = _set_stat(stats->bytes_sent_5min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/bytes/sent/15min")) {
+        stats->bytes_sent_15min = _set_stat(stats->bytes_sent_15min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/messages/received/1min")) {
+        stats->messages_received_1min = _set_stat(stats->messages_received_1min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/messages/received/5min")) {
+        stats->messages_received_5min = _set_stat(stats->messages_received_5min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/messages/received/15min")) {
+        stats->messages_received_15min = _set_stat(stats->messages_received_15min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/messages/sent/1min")) {
+        stats->messages_sent_1min = _set_stat(stats->messages_sent_1min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/messages/sent/5min")) {
+        stats->messages_sent_5min = _set_stat(stats->messages_sent_5min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/messages/sent/15min")) {
+        stats->messages_sent_15min = _set_stat(stats->messages_sent_15min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/publish/dropped/1min")) {
+        stats->publish_dropped_1min = _set_stat(stats->publish_dropped_1min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/publish/dropped/5min")) {
+        stats->publish_dropped_5min = _set_stat(stats->publish_dropped_5min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/publish/dropped/15min")) {
+        stats->publish_dropped_15min = _set_stat(stats->publish_dropped_15min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/publish/received/1min")) {
+        stats->publish_received_1min = _set_stat(stats->publish_received_1min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/publish/received/5min")) {
+        stats->publish_received_5min = _set_stat(stats->publish_received_5min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/publish/received/15min")) {
+        stats->publish_received_15min = _set_stat(stats->publish_received_15min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/publish/sent/1min")) {
+        stats->publish_sent_1min = _set_stat(stats->publish_sent_1min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/publish/sent/5min")) {
+        stats->publish_sent_5min = _set_stat(stats->publish_sent_5min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/publish/sent/15min")) {
+        stats->publish_sent_15min = _set_stat(stats->publish_sent_15min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/sockets/1min")) {
+        stats->sockets_1min = _set_stat(stats->sockets_1min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/sockets/5min")) {
+        stats->sockets_5min = _set_stat(stats->sockets_5min, data);
+    } else if (!strcmp(topic, "$SYS/broker/load/sockets/15min")) {
+        stats->sockets_15min = _set_stat(stats->sockets_15min, data);
+    } else if (!strcmp(topic, "$SYS/broker/messages/inflight")) {
+        stats->messages_inflight = _set_stat(stats->messages_inflight, data);
+    } else if (!strcmp(topic, "$SYS/broker/messages/received")) {
+        stats->messages_received = _set_stat(stats->messages_received, data);
+    } else if (!strcmp(topic, "$SYS/broker/messages/sent")) {
+        stats->messages_sent = _set_stat(stats->messages_sent, data);
+    } else if (!strcmp(topic, "$SYS/broker/messages/stored")) {
+        stats->messages_stored = _set_stat(stats->messages_stored, data);
+    } else if (!strcmp(topic, "$SYS/broker/publish/messages/dropped")) {
+        stats->publish_messages_dropped = _set_stat(stats->publish_messages_dropped, data);
+    } else if (!strcmp(topic, "$SYS/broker/publish/messages/received")) {
+        stats->publish_messages_received = _set_stat(stats->publish_messages_received, data);
+    } else if (!strcmp(topic, "$SYS/broker/publish/messages/sent")) {
+        stats->publish_messages_sent = _set_stat(stats->publish_messages_sent, data);
+    } else if (!strcmp(topic, "$SYS/broker/publish/bytes/received")) {
+        stats->publish_bytes_received = _set_stat(stats->publish_bytes_received, data);
+    } else if (!strcmp(topic, "$SYS/broker/publish/bytes/sent")) {
+        stats->publish_bytes_sent = _set_stat(stats->publish_bytes_sent, data);
+    } else if (!strcmp(topic, "$SYS/broker/retained messages/count")) {
+        stats->messages_retained = _set_stat(stats->messages_retained, data);
+    } else if (!strcmp(topic, "$SYS/broker/subscriptions/count")) {
+        stats->subscriptions = _set_stat(stats->subscriptions, data);
     } else {
-        fprintf(stderr, "Unaccounted topic %s = %s\n", topic, data);
+        if (cfg->debug) {
+            // don't report for version, timestamp and uptime
+            if (!(!strcmp(topic, "$SYS/broker/version") || !strcmp(topic, "$SYS/broker/timestamp") || !strcmp(topic, "$SYS/broker/uptime"))) {
+                fprintf(stderr, "Unaccounted topic %s = %s\n", topic, data);
+            }
+        }
     }
-
 }
 
 void _mqtt_message_callback(struct mosquitto *mosq, void *obj, const struct mosquitto_message *message) {
     struct configuration *cfg = (struct configuration *) obj;
     if (message) {
-//        printf("> MQTT message on %s of %d bytes -> %s\n", message->topic, message->payloadlen, (char *)message->payload);
         pthread_mutex_lock(&mqtt_mutex);
-        _update_broker_stats(cfg->broker_stats, message->topic, (char *) message->payload);
+        _update_broker_stats(cfg, message->topic, (char *) message->payload);
         pthread_mutex_unlock(&mqtt_mutex);
     }
 };

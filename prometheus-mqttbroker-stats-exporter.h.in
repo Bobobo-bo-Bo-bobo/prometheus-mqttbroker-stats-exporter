@@ -17,17 +17,111 @@ extern pthread_mutex_t mqtt_mutex;
 struct statistics {
     // total number of bytes received since the broker started.
     char *bytes_received;
+
     // total number of bytes sent since the broker started.
     char *bytes_sent;
+
     // number of disconnected persistent clients that have been expired and removed through the persistent_client_expiration option.
     char *clients_expired;
+
     // maximum number of clients that have been connected to the broker at the same time
     char *clients_maximum;
+
     // total number of active and inactive clients currently connected and registered on the broker.
     char *clients_total;
+
     // total number of connected and disconnected clients with a persistent session currently connected and registered on the broker.
     char *total_clients;
 
+    // number of connected clients (deprecated)
+    char *clients_connected;
+    char *clients_active;
+
+    // total number of persistent clients (with clean session disabled) that are registered at the broker but are currently disconnected. (deprecated)
+    char *clients_disconnected;
+    char *clients_inactive;
+
+    // size of the heap memory in use by mosquitto.
+    char *heap_current;
+    char *heap_maximum;
+
+    // moving average of the number of CONNECT packets received by the broker over different time intervals
+    char *connections_1min;
+    char *connections_5min;
+    char *connections_15min;
+
+    // moving average of the number of bytes received by the broker over different time intervals
+    char *bytes_received_1min;
+    char *bytes_received_5min;
+    char *bytes_received_15min;
+
+    // moving average of the number of bytes sent by the broker over different time intervals
+    char *bytes_sent_1min;
+    char *bytes_sent_5min;
+    char *bytes_sent_15min;
+
+    // moving average of the number of all types of MQTT messages received by the broker over different time intervals.
+    char *messages_received_1min;
+    char *messages_received_5min;
+    char *messages_received_15min;
+
+    // moving average of the number of all types of MQTT messages sent by the broker over different time intervals.
+    char *messages_sent_1min;
+    char *messages_sent_5min;
+    char *messages_sent_15min;
+
+    // moving average of the number of publish messages dropped by the broker over different time intervals
+    char *publish_dropped_1min;
+    char *publish_dropped_5min;
+    char *publish_dropped_15min;
+
+    // moving average of the number of publish messages received by the broker over different time intervals.
+    char *publish_received_1min;
+    char *publish_received_5min;
+    char *publish_received_15min;
+
+    // moving average of the number of publish messages sent by the broker over different time intervals.
+    char *publish_sent_1min;
+    char *publish_sent_5min;
+    char *publish_sent_15min;
+
+    // moving average of the number of socket connections opened to the broker over different time intervals
+    char *sockets_1min;
+    char *sockets_5min;
+    char *sockets_15min;
+
+    // number of messages with QoS>0 that are awaiting acknowledgments.
+    char *messages_inflight;
+
+    // total number of messages of any type received since the broker started
+    char *messages_received;
+
+    // total number of messages of any type sent since the broker started
+    char *messages_sent;
+
+    // number of messages currently held in the message store
+    char *messages_stored;
+
+    // total number of publish messages that have been dropped due to inflight/queuing limits
+    char *publish_messages_dropped;
+
+    // total number of PUBLISH messages received since the broker started
+    char *publish_messages_received;
+
+    // total number of PUBLISH messages sent since the broker started
+    char *publish_messages_sent;
+
+    // total number of PUBLISH received since the broker started
+    char *publish_bytes_received;
+
+    // total number of PUBLISH sent since the broker started
+    char *publish_bytes_sent;
+
+    // total number of retained messages active on the broker
+    char *messages_retained;
+
+    // total number of subscriptions active on the broker
+    char *subscriptions;
 };
 
 struct configuration {
