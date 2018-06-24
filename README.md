@@ -58,7 +58,7 @@ GNU Libmicrohttpd is licensed under the [GNU Lesser General Public License, vers
         <td>total number of bytes received since the broker started</td>
     </tr>
     <tr>
-        <td><$SYS/broker/bytes/sent/td>
+        <td>$SYS/broker/bytes/sent/<td>
         <td>mqtt_broker_bytes_sent_total</td>
         <td>counter</td>
         <td>total number of bytes sent since the broker started</td>
