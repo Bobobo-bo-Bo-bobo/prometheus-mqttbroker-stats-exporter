@@ -113,7 +113,7 @@ void _update_broker_stats(struct configuration *cfg, const char *topic, char *da
     struct statistics *stats = cfg->broker_stats;
 
     if (!strcmp(topic, "$SYS/broker/clients/total")) {
-        stats->total_clients = _set_stat(stats->total_clients, data);
+        stats->clients_total = _set_stat(stats->clients_total, data);
     } else if (!strcmp(topic, "$SYS/broker/bytes/received")) {
         stats->bytes_received = _set_stat(stats->bytes_received, data);
     } else if (!strcmp(topic, "$SYS/broker/bytes/sent")) {
@@ -122,8 +122,6 @@ void _update_broker_stats(struct configuration *cfg, const char *topic, char *da
         stats->clients_expired = _set_stat(stats->clients_expired, data);
     } else if (!strcmp(topic, "$SYS/broker/clients/maximum")) {
         stats->clients_maximum = _set_stat(stats->clients_maximum, data);
-    } else if (!strcmp(topic, "$SYS/broker/clients/total")) {
-        stats->clients_total = _set_stat(stats->clients_total, data);
     } else if (!strcmp(topic, "$SYS/broker/clients/connected")) {
         stats->clients_connected = _set_stat(stats->clients_connected, data);
     } else if (!strcmp(topic, "$SYS/broker/clients/active")) {

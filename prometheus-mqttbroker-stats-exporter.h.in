@@ -27,11 +27,8 @@ struct statistics {
     // maximum number of clients that have been connected to the broker at the same time
     char *clients_maximum;
 
-    // total number of active and inactive clients currently connected and registered on the broker.
-    char *clients_total;
-
     // total number of connected and disconnected clients with a persistent session currently connected and registered on the broker.
-    char *total_clients;
+    char *clients_total;
 
     // number of connected clients (deprecated)
     char *clients_connected;
