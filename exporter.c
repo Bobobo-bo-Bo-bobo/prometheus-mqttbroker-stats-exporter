@@ -8,7 +8,7 @@
 #include <unistd.h>
 
 const char *slash_html = "<html>\n<head>\n<title>MQTT broker statistic exporter</title>\n<head>\n<body>\n<h1>MQTT broker statistic exporter</h1>\n<p>\n<a href=\"/metrics\" alt=\"Metrics\">Metrics</a>\n</p>\n</body>\n</html>\n";
-const char *http_404 = "405 - Not found\n";
+const char *http_404 = "404 - Not found\n";
 const char *http_405 = "405 - Method not allowed\n";
 const char *http_500 = "500 - Internal Server Error\n";
 
@@ -907,9 +907,8 @@ int handle_http_request(void *cls, struct MHD_Connection *con, const char *url, 
         fprintf(stderr, "DEBUG: %s %s\n", method, url);
     }
 
-    if (strcmp(method, "GET") == 0) {
-	// point it to /metrics if / is requested
-	if (strcmp(url, "/") == 0) {
+    if (!strcmp(method, "GET")) {
+	if (!strcmp(url, "/")) {
             // MHD_RESPMEM_PERSISTENT - Buffer is a persistent (static/global) buffer that won’t change for at least
             // the lifetime of the response, MHD should just use it, not free it, not copy it, just keep an alias to it.
             reply = MHD_create_response_from_buffer(strlen(slash_html), (void *) slash_html, MHD_RESPMEM_PERSISTENT);
@@ -921,15 +920,7 @@ int handle_http_request(void *cls, struct MHD_Connection *con, const char *url, 
 
             http_status = 200;
             metric = NULL;
-        } else if (strcmp(url, "/metrics") == 0) {
-            // MHD_RESPMEM_PERSISTENT - Buffer is a persistent (static/global) buffer that won’t change for at least
-            // the lifetime of the response, MHD should just use it, not free it, not copy it, just keep an alias to it.
-            reply = MHD_create_response_from_buffer(strlen(slash_html), (void *) slash_html, MHD_RESPMEM_PERSISTENT);
-            if (!reply) {
-                fprintf(stderr, "ERROR: handle_http_request: Unable to generate response structure for /metrics");
-                return MHD_NO;
-            }
-
+        } else if (!strcmp(url, "/metrics")) {
             pthread_mutex_lock(&mqtt_mutex);
             metric = _build_metrics_string(config);
             pthread_mutex_unlock(&mqtt_mutex);
@@ -961,7 +952,6 @@ int handle_http_request(void *cls, struct MHD_Connection *con, const char *url, 
             MHD_add_response_header(reply, "Content-Type", "text/plain");
             // we only allow GET
             http_status = 404;
-            metric = NULL;
 	}
     } else {
         // MHD_RESPMEM_PERSISTENT - Buffer is a persistent (static/global) buffer that won’t change for at least
@@ -974,11 +964,11 @@ int handle_http_request(void *cls, struct MHD_Connection *con, const char *url, 
         MHD_add_response_header(reply, "Content-Type", "text/plain");
         // we only allow GET
         http_status = 405;
-        metric = NULL;
     }
 
     rc = MHD_queue_response(con, http_status, reply);
     MHD_destroy_response(reply);
 
     free(metric);
+    return rc;
 }

@@ -12,7 +12,7 @@
 #include "mqtt_connect.h"
 #include "exporter.h"
 
-const char *const short_opts = "hu:p:c:k:C:D:iH:P:K:Q:T:t:f:sd";
+const char *const short_opts = "hu:p:c:k:C:D:iH:P:K:Q:T:t:f:sdl:";
 const struct option long_opts[] = {
     { "help", no_argument, NULL, 'h' },
     { "user", required_argument, NULL, 'u' },
@@ -31,6 +31,7 @@ const struct option long_opts[] = {
     { "password-file", required_argument, NULL, 'f' },
     { "ssl", no_argument, NULL, 's' },
     { "debug", no_argument, NULL, 'd' },
+    { "listen", required_argument, NULL, 'l' },
     { NULL, 0, NULL, 0 },
 };
 
@@ -237,6 +238,27 @@ int main(int argc, char** argv) {
                           config->debug = true;
                           break;
                       }
+            case 'l': {
+                          converted = strtol(optarg, &remain, 10);
+                          // check for integer over-/underflow or any other error
+                          if ((errno == ERANGE && (converted == LONG_MAX || converted == LONG_MIN)) || (errno != 0 && converted == 0)) {
+                              fprintf(stderr, "ERROR: Unable to convert %s to a number: %s\n", optarg, strerror(errno));
+                              exit(errno);
+                          }
+
+                          // Shouldn't happen with getopt
+                          if (optarg == remain) {
+                              fprintf(stderr, "ERROR: No number found in %s\n", optarg);
+                              exit(1);
+                          }
+
+                          if (*remain != 0) {
+                              fprintf(stderr, "ERROR: Unable to convert %s to a number: non-numeric characters found\n", optarg);
+                              exit(1);
+                          }
+                          config->http_port = (int) converted;
+                          break;
+                      }
             default: {
                          fprintf(stderr, "ERROR: Unknown argument\n\n");
                          usage();
@@ -263,16 +285,14 @@ int main(int argc, char** argv) {
         fprintf(stderr, "ERROR: Use either user/password or SSL client certificate for authentication\n");
         exit(1);
     }
-/*
-    // Authentication: either user/password or SSL client certificate but at lease one of them
-    if ((!config->mqtt_user) && (!config->mqtt_password) && (!config->mqtt_ssl_certfile) && (!config->mqtt_ssl_keyfile)) {
-        fprintf(stderr, "ERROR: Use one of user/password or SSL client certificates for authentication\n");
-        exit(1);
-    }
-*/
+
     // Check port
     if ((config->mqtt_port <= 0) || (config->mqtt_port > 65535)) {
         fprintf(stderr, "ERROR: Invalid MQTT port %d\n", config->mqtt_port);
+        exit(1);
+    }
+    if ((config->http_port <= 0) || (config->http_port > 65535)) {
+        fprintf(stderr, "ERROR: Invalid listen port %d\n", config->http_port);
         exit(1);
     }
 

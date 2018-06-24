@@ -68,6 +68,10 @@ void usage(void) {
             "\n"
             "   -d                              Enable debug outout\n"
             "   --debug"
+            "\n"
+            "-l <port>                          Run on <port> for metrics export to Prometheus\n"
+            "--listen=<port>                    Default: 11883\n"
+            "\n"
             "\n", PROMETHEUS_MQTTBROKER_STATS_EXPORTER_VERSION, major, minor, revision);
 };
 
