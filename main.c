@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
 
     config = (struct configuration *) malloc(sizeof(struct configuration));
     if (!config) {
-        fprintf(stderr, "ERROR: Unable to allocate %d bytes of memory\n", sizeof(struct configuration));
+        fprintf(stderr, "ERROR: Unable to allocate %lu bytes of memory\n", sizeof(struct configuration));
         exit(1);
     }
 
@@ -66,7 +66,7 @@ int main(int argc, char** argv) {
     config->broker_stats = malloc(sizeof(struct statistics));
 
     if (!config->broker_stats) {
-        fprintf(stderr, "ERROR: Unable to allocate %d bytes of memory for broker statistics\n", sizeof(struct statistics));
+        fprintf(stderr, "ERROR: Unable to allocate %lu bytes of memory for broker statistics\n", sizeof(struct statistics));
         exit(1);
     }
 
@@ -88,7 +88,7 @@ int main(int argc, char** argv) {
             case 'u': {
                           config->mqtt_user = strdup(optarg);
                           if (!config->mqtt_user) {
-                              fprintf(stderr, "ERROR: Unable to allocate %d bytes of memory for copying the MQTT user parameter\n", strlen(optarg));
+                              fprintf(stderr, "ERROR: Unable to allocate %lu bytes of memory for copying the MQTT user parameter\n", strlen(optarg));
                               exit(1);
                           }
                           break;
@@ -96,7 +96,7 @@ int main(int argc, char** argv) {
             case 'p': {
                           config->mqtt_password = strdup(optarg);
                           if (!config->mqtt_password) {
-                              fprintf(stderr, "ERROR: Unable to allocate %d bytes of memory for copying the MQTT password parameter\n", strlen(optarg));
+                              fprintf(stderr, "ERROR: Unable to allocate %lu bytes of memory for copying the MQTT password parameter\n", strlen(optarg));
                               exit(1);
                           }
                           break;
@@ -104,7 +104,7 @@ int main(int argc, char** argv) {
             case 'c': {
                           config->mqtt_ssl_certfile = strdup(optarg);
                           if (!config->mqtt_ssl_certfile) {
-                              fprintf(stderr, "ERROR: Unable to allocate %d bytes of memory for copying the MQTT SSL certificate file parameter\n", strlen(optarg));
+                              fprintf(stderr, "ERROR: Unable to allocate %lu bytes of memory for copying the MQTT SSL certificate file parameter\n", strlen(optarg));
                               exit(1);
                           }
                           break;
@@ -112,7 +112,7 @@ int main(int argc, char** argv) {
             case 'k': {
                           config->mqtt_ssl_keyfile = strdup(optarg);
                           if (!config->mqtt_ssl_keyfile) {
-                              fprintf(stderr, "ERROR: Unable to allocate %d bytes of memory for copying the MQTT SSL private key parameter\n", strlen(optarg));
+                              fprintf(stderr, "ERROR: Unable to allocate %lu bytes of memory for copying the MQTT SSL private key parameter\n", strlen(optarg));
                               exit(1);
                           }
                           break;
@@ -120,7 +120,7 @@ int main(int argc, char** argv) {
             case 'C': {
                           config->mqtt_ssl_cafile = strdup(optarg);
                           if (!config->mqtt_ssl_cafile) {
-                              fprintf(stderr, "ERROR: Unable to allocate %d bytes of memory for copying the MQTT SSL CA file parameter\n", strlen(optarg));
+                              fprintf(stderr, "ERROR: Unable to allocate %lu bytes of memory for copying the MQTT SSL CA file parameter\n", strlen(optarg));
                               exit(1);
                           }
                           break;
@@ -128,7 +128,7 @@ int main(int argc, char** argv) {
             case 'D': {
                           config->mqtt_ssl_cadir = strdup(optarg);
                           if (!config->mqtt_ssl_cadir) {
-                              fprintf(stderr, "ERROR: Unable to allocate %d bytes of memory for copying the MQTT SSL CA directory parameter\n", strlen(optarg));
+                              fprintf(stderr, "ERROR: Unable to allocate %lu bytes of memory for copying the MQTT SSL CA directory parameter\n", strlen(optarg));
                               exit(1);
                           }
                           break;
@@ -140,7 +140,7 @@ int main(int argc, char** argv) {
             case 'H': {
                           config->mqtt_host = strdup(optarg);
                           if (!config->mqtt_host) {
-                              fprintf(stderr, "ERROR: Unable to allocate %d bytes of memory for copying the MQTT host parameter\n", strlen(optarg));
+                              fprintf(stderr, "ERROR: Unable to allocate %lu bytes of memory for copying the MQTT host parameter\n", strlen(optarg));
                               exit(1);
                           }
                           break;
