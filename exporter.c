@@ -625,7 +625,7 @@ char *_append_metric_data(char *dst, char *src, bool free_src) {
 
     result = realloc(dst, dst_len + src_len + 1); // +1 for terminating 0
     if (!result) {
-        fprintf(stderr, "ERROR: Unable to allocate %d bytes of memory for metric update\n",   dst_len + src_len + 1);
+        fprintf(stderr, "ERROR: Unable to allocate %lu bytes of memory for metric update\n",   dst_len + src_len + 1);
         if (free_src) {
             free(src);
         }
