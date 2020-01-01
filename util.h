@@ -14,5 +14,6 @@ void *memset(void *, int, size_t);
 
 #endif /* HAVE_MEMSET */
 
+int read_password_from_file(const char *, struct configuration *);
 #endif /* __PROMETHEUS_MQTTBROKER_STATS_EXPORTER_UTIL_H__ */
 

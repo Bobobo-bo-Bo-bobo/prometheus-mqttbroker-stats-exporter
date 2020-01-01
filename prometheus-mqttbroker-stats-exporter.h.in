@@ -147,5 +147,7 @@ struct configuration {
 // Required because libmicrohttpd need to access information
 extern struct configuration *config;
 
+#define READ_BUFFER_SIZE 65536
+
 #endif /* __PROMETHEUS_MQTTBROKER_STATS_EXPORTER_CONFIG_H__ */
 

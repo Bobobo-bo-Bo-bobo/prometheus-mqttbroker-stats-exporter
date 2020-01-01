@@ -11,6 +11,7 @@
 #include "usage.h"
 #include "mqtt_connect.h"
 #include "exporter.h"
+#include "util.h"
 
 const char *const short_opts = "hu:p:c:k:C:D:iH:P:K:Q:T:t:f:sdl:";
 const struct option long_opts[] = {
@@ -46,6 +47,8 @@ int main(int argc, char** argv) {
     long int converted;
     pthread_t mqtt_connection_thread;
     struct MHD_Daemon *httpd = NULL;
+    int rc;
+    char char2string[2];
 
     config = (struct configuration *) malloc(sizeof(struct configuration));
     if (!config) {
@@ -231,7 +234,11 @@ int main(int argc, char** argv) {
                           break;
                       }
             case 'f': {
-                          // TODO: read password from file
+                          rc = read_password_from_file(optarg, config);
+                          if (rc) {
+                              fprintf(stderr, "ERROR: Can't read password from %s: %s\n", optarg, strerror(rc));
+                              exit(1);
+                          }
                           break;
                       }
             case 'd': {
@@ -259,8 +266,14 @@ int main(int argc, char** argv) {
                           config->http_port = (int) converted;
                           break;
                       }
+            case 's': {
+                          config->mqtt_ssl = true;
+                          break;
+                      }
             default: {
-                         fprintf(stderr, "ERROR: Unknown argument\n\n");
+                         char2string[0] = gorc;
+                         char2string[1] = 0;
+                         fprintf(stderr, "ERROR: Unknown argument: %s\n\n", char2string);
                          usage();
                          exit(1);
                      }
@@ -300,6 +313,11 @@ int main(int argc, char** argv) {
     if ((config->mqtt_qos < 0) || (config->mqtt_qos > 2)) {
         fprintf(stderr, "ERROR: Invalid MQTT QoS value, must be either 0, 1 or 2 but not %d\n", config->mqtt_qos);
         exit(2);
+    }
+
+    // if CA file/directory or client certificate/key are set set SSL too
+    if ((config->mqtt_ssl_cafile) || (config->mqtt_ssl_cadir) || (config->mqtt_ssl_certfile) || (config->mqtt_ssl_keyfile)) {
+        config->mqtt_ssl = true;
     }
 
     httpd = MHD_start_daemon(MHD_USE_SELECT_INTERNALLY, config->http_port, NULL, NULL, &handle_http_request, NULL, MHD_OPTION_END);

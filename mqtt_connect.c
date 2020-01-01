@@ -276,6 +276,15 @@ void *mqtt_connect(void *ptr) {
     // Connect by either using user/password or client certificate
     // XXX: There is a third option, "pre-shared key over TLS" - mosquitto_tls_psk_set
     if (cfg->mqtt_user) {
+        // CA file or CA directory is mandatory when using SSL/TLS. Otherwise the connection will be rejceted (server: "...SSL routines:ssl3_get_record:wrong version number.")
+        if (cfg->mqtt_ssl) {
+            mqtt_rc = mosquitto_tls_set(mqtt, cfg->mqtt_ssl_cafile, cfg->mqtt_ssl_cadir, NULL, NULL, NULL);
+            if (mqtt_rc != MOSQ_ERR_SUCCESS) {
+                fprintf(stderr, "ERROR: Unable to set MQTT client certificate, code %d\n", mqtt_rc);
+                exit(mqtt_rc);
+            }
+        }
+
         mqtt_rc = mosquitto_username_pw_set(mqtt, cfg->mqtt_user, cfg->mqtt_password);
         if (mqtt_rc != MOSQ_ERR_SUCCESS) {
             fprintf(stderr, "ERROR: Unable to set MQTT username/password, code %d\n", mqtt_rc);
