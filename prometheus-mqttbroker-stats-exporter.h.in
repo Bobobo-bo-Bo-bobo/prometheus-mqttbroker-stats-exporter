@@ -97,7 +97,10 @@ struct statistics {
     char *messages_sent;
 
     // number of messages currently held in the message store
+    // (Note: Starting with Mosquitto 1.5 $SYS/broker/store/messages/count replaced $SYS/broker/messages/stored
+    //         and $SYS/broker/store/messages/bytes was added, see https://projects.eclipse.org/projects/iot.mosquitto/releases/1.5)
     char *messages_stored;
+    char *messages_stored_bytes; // Added in Mosquitto 1.5
 
     // total number of publish messages that have been dropped due to inflight/queuing limits
     char *publish_messages_dropped;

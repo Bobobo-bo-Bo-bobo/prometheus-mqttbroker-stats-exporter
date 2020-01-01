@@ -143,6 +143,9 @@ int handle_http_request(void *, struct MHD_Connection *, const char*, const char
 #define MESSAGES_STORED_STR "# TYPE mqtt_broker_messages_stored gauge\nmqtt_broker_messages_stored{broker=\"%s\"} %s\n# HELP mqtt_broker_messages_stored number of messages currently held in the message store\n"
 #define MESSAGES_STORED_LEN 171
 
+#define MESSAGES_STORED_BYTES_STR "# TYPE mqtt_broker_messages_stored_bytes gauge\nmqtt_broker_messages_stored_bytes{broker=\"%s\"} %s\n# HELP mqtt_broker_messages_stored_bytes number of bytes currently held in the message store\n"
+#define MESSAGES_STORED_BYTES_LEN 186
+
 #define PUBLISH_MESSAGES_DROPPED_STR "# TYPE mqtt_broker_publish_messages_dropped_total counter\nmqtt_broker_publish_messages_dropped_total{broker=\"%s\"} %s\n# HELP mqtt_broker_publish_messages_dropped_total total number of publish messages that have been dropped due to inflight/queuing limits\n"
 #define PUBLISH_MESSAGES_DROPPED_LEN 250
 

@@ -194,8 +194,15 @@ void _update_broker_stats(struct configuration *cfg, const char *topic, char *da
         stats->messages_received = _set_stat(stats->messages_received, data);
     } else if (!strcmp(topic, "$SYS/broker/messages/sent")) {
         stats->messages_sent = _set_stat(stats->messages_sent, data);
+    // Note: Starting with Mosquitto 1.5 $SYS/broker/store/messages/count replaced $SYS/broker/messages/stored and $SYS/broker/store/messages/bytes was added
     } else if (!strcmp(topic, "$SYS/broker/messages/stored")) {
         stats->messages_stored = _set_stat(stats->messages_stored, data);
+    // Note: Starting with Mosquitto 1.5 $SYS/broker/store/messages/count replaced $SYS/broker/messages/stored and $SYS/broker/store/messages/bytes was added
+    } else if (!strcmp(topic, "$SYS/broker/store/messages/count")) {
+        stats->messages_stored = _set_stat(stats->messages_stored, data);
+    // Note: Starting with Mosquitto 1.5 $SYS/broker/store/messages/count replaced $SYS/broker/messages/stored and $SYS/broker/store/messages/bytes was added
+    } else if (!strcmp(topic, "$SYS/broker/store/messages/bytes")) {
+        stats->messages_stored_bytes = _set_stat(stats->messages_stored_bytes, data);
     } else if (!strcmp(topic, "$SYS/broker/publish/messages/dropped")) {
         stats->publish_messages_dropped = _set_stat(stats->publish_messages_dropped, data);
     } else if (!strcmp(topic, "$SYS/broker/publish/messages/received")) {

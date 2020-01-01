@@ -516,6 +516,19 @@ char *_build_messages_stored(const struct configuration *cfg) {
     return result;
 }
 
+// Note: Starting with Mosquitto 1.5 $SYS/broker/store/messages/count replaced $SYS/broker/messages/stored and $SYS/broker/store/messages/bytes was added
+char *_build_messages_stored_bytes(const struct configuration *cfg) {
+    char *result;
+    size_t size;
+
+    size = MESSAGES_STORED_BYTES_LEN + strlen(cfg->mqtt_host) + strlen(cfg->broker_stats->messages_stored_bytes) + 1;
+    result = malloc(size);
+    if (result) {
+        snprintf(result, size, MESSAGES_STORED_BYTES_STR, cfg->mqtt_host, cfg->broker_stats->messages_stored_bytes);
+    }
+    return result;
+}
+
 char *_build_publish_messages_dropped(const struct configuration *cfg) {
     char *result;
     size_t size;
@@ -855,6 +868,12 @@ char *_build_metrics_string(struct configuration *cfg) {
 
     if (cfg->broker_stats->messages_stored) {
         line = _build_messages_stored(cfg);
+        result = _append_metric_data(result, line, true);
+    }
+
+    // Note: Starting with Mosquitto 1.5 $SYS/broker/store/messages/count replaced $SYS/broker/messages/stored and $SYS/broker/store/messages/bytes was added
+    if (cfg->broker_stats->messages_stored_bytes) {
+        line = _build_messages_stored_bytes(cfg);
         result = _append_metric_data(result, line, true);
     }
 
